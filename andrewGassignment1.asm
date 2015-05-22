@@ -1,3 +1,6 @@
+#Andrew Gregory Assignment #1
+#Class: CSE 230: M-F 10:10AM - 11:10AM
+#Date: 5/22/2015
 .data 
 val1: .word 1 
 val2: .word 2 
@@ -52,25 +55,69 @@ lui $a0, 0x1001			#initializes $a0 to start of .data
 addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
 syscall				#prints str3 after reading previous 2 lines
 #print val1
-addi $v0, $zero, 4
-lui $a0, 0x1001
-syscall
+addi $v0, $zero, 1		#puts the command to print an int into $v0
+lui $a0, 0x1001			#load upper immediate with beginning of .data
+lw $a0, 0($a0)			#loads word from address 0x10010000
+syscall				#prints val1 after reading previous lines
 #next line
-addi $v0, $zero, 4
-lui $a0, 0x1001
-addi $a0, $a0, 42
-syscall
+addi $v0, $zero, 4		#puts the command to print a string into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
+syscall				#prints str3 after reading previous 2 lines
 #print val2
-addi $v0, $zero, 4
-lui $a0, 0x1001
-addi $a0, $a0, 4
+addi $v0, $zero, 1		#puts the command to print an int into $v0		
+lui $a0, 0x1001			#initializes $a0 to start of .data
+lw $a0, 4($a0)			#loads word from address 0x10010004
+syscall				#prints val2 after reading previous lines
 #next line
-addi $v0, $zero, 4
-lui $a0, 0x1001
-addi $a0, $a0, 42
-syscall
+addi $v0, $zero, 4		#puts the command to print a string into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
+syscall				#prints str3 after reading previous 2 lines
 #print val3
-addi $v0, $zero, 4
-lui $a0, 0x1001
-addi $a0, $a0, 8
+addi $v0, $zero, 1		#puts the command to print an int into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+lw $a0, 8($a0)			#loads word from address 0x10010008
+syscall				#prints val3 after reading previous lines
 #Step 8
+lui $t0, 0x1001			#initializes $t0 to the start of .data
+lw $t1, 4($t0)			#loads word from address 0x10010004
+addi $t1, $t1, 1		#adds 1 to the value in $t2
+sw $t1, 4($t0)			#stores $t1 in address 0x10010004
+#Step 9
+lw $t2, 0($t0)			#grabs val1 and places it in t2
+sw $t1,	0($t0)			#puts the value of val2 into val1
+sw $t2, 4($t0)			#puts the value of val1 into val2
+#Step 10
+sub $s0, $zero, $s0
+#Step 11
+#next line
+addi $v0, $zero, 4		#puts the command to print a string into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
+syscall				#prints str3 after reading previous 2 lines
+#print $s0
+addi $v0, $zero, 1		#puts the command to print an int into $v0
+addi $a0, $s0, 0		#puts the value of $s0 into $a0
+syscall				#prints the value of $s0
+#next line
+addi $v0, $zero, 4		#puts the command to print a string into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
+syscall				#prints str3 after reading previous 2 lines
+#print $s1
+addi $v0, $zero, 1		#puts the command to print an int into $v0
+addi $a0, $s1, 0		#puts the value of $s1 into $a0
+syscall				#prints the value of $s1
+#next line
+addi $v0, $zero, 4		#puts the command to print a string into $v0
+lui $a0, 0x1001			#initializes $a0 to start of .data
+addi $a0, $a0, 42		#puts the str3 pointer into $a0 to be printed
+syscall				#prints str3 after reading previous 2 lines
+#print $s2
+addi $v0, $zero, 1		#puts the command to print an int into $v0
+addi $a0, $s2, 0		#puts the value of $s2 into $a0
+syscall				#prints the value of $s2
+#end program
+addi $v0, $zero, 10		#puts the command to end the program into $v0
+syscall				#ends the program
