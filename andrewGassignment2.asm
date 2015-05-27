@@ -5,6 +5,72 @@
 input1: .word 1
 input2: .word 2
 name: .asciiz "Andrew Gregory"
+prompt: .asciiz "Please enter a number "
+nl: .asciiz "\n"
+space: .asciiz " "
 .globl main 
 .text 
 main:
+#Step 1 (print name)
+
+addi $v0, $zero, 4			#load instruction to print string into $v0
+lui $s0, 0x1001				#load upper immediate of $s0 with 0x1001
+addi $a0, $s0, 8			#adds 8 to $s0 to store 0x1001008 into $a0
+syscall					#prints the string found at 0x1001008
+
+#Step 2 (prompt and read two integers)
+
+#new line
+addi $v0, $zero, 4
+addi $a0, $s0, 46
+syscall
+
+#new line
+addi $v0, $zero, 4
+addi $a0, $s0, 46
+syscall
+
+#prompt 1
+addi $v0, $zero, 4
+addi $a0, $s0, 23
+syscall
+
+#get input 1
+addi $v0, $zero, 5
+syscall
+addi $s1, $v0, 0
+
+#prompt 2
+addi $v0, $zero, 4
+addi $a0, $s0, 23
+syscall
+
+#get input 2
+addi $v0, $zero, 5
+syscall
+addi $s2, $v0, 0
+
+#Step 3
+addi $t1, $s1, 0
+addi $t2, $s2, 0
+addi $t1, $t1, -1
+
+startDown: addi
+
+startUp: addi $t1, $t1, 1
+	beq $t1, $t2, end
+	
+	addi $v0, $zero, 1
+	addi $a0, $t1, 0
+	syscall
+	
+	#space
+	addi $v0, $zero, 4
+	addi $a0, $s0, 48
+	syscall
+
+	j startUp
+
+end: 	addi $v0, $zero, 1
+	addi $a0, $t1, 0
+	syscall
