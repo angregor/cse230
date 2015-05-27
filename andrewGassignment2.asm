@@ -8,6 +8,7 @@ name: .asciiz "Andrew Gregory"
 prompt: .asciiz "Please enter a number "
 nl: .asciiz "\n"
 space: .asciiz " "
+endMessage: .asciiz "Program complete"
 .globl main 
 .text 
 main:
@@ -53,9 +54,23 @@ addi $s2, $v0, 0
 #Step 3
 addi $t1, $s1, 0
 addi $t2, $s2, 0
+slt $t3, $t1, $t2
 addi $t1, $t1, -1
+bne $t3, $zero, startUp
+addi $t1, $t1, 2
+startDown: addi $t1, $t1, -1
+	beq $t1, $t2, end
+	
+	addi $v0, $zero, 1
+	addi $a0, $t1, 0
+	syscall
+	
+	#space
+	addi $v0, $zero, 4
+	addi $a0, $s0, 48
+	syscall
 
-startDown: addi
+	j startDown
 
 startUp: addi $t1, $t1, 1
 	beq $t1, $t2, end
@@ -74,3 +89,15 @@ startUp: addi $t1, $t1, 1
 end: 	addi $v0, $zero, 1
 	addi $a0, $t1, 0
 	syscall
+#Step 4 (program complete message)
+
+#new line
+addi $v0, $zero, 4
+addi $a0, $s0, 46
+syscall
+syscall
+
+#complete message
+addi $v0, $zero, 4
+addi $a0, $s0, 50
+syscall
