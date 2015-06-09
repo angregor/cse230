@@ -46,6 +46,10 @@ main:
 	ori $v0, $0, 10		#set command to stop program
 	syscall			#stop program
 
+#print function description:
+#		prints a string placed in $a0, and takes an integer input $a1. $a2 is a flag that determines
+#		whether or not to print the int. register $t7 is used to check for $a2 being equal to 1
+
 print:
 	#allocate memory
 	addi $sp, $sp, -4			#pushes the stack pointer back 4
@@ -74,6 +78,10 @@ print:
 		addi $sp, $sp, 4		#restores stack pointer
 		jr $ra				#return to $ra
 		
+#divide function description:
+#		takes two integers placed in $a0 and $a1 and returns $a0 / $a1 in the register $v0
+#		$t1 is used as a temporary to do the division, and $t3 is used for comparisons. $t2 is used for comparisons as well.
+
 divide:
 	#setup for integer division
 	add $t1, $zero, $a0			#sets $t1 to $a0
@@ -92,7 +100,11 @@ divide:
 	#end of division with remainder
 	endRemainDiv:	sub $v0, $v0, $t3	#sets $v0 to the value of $v0 - $t3
 			jr $ra			#returns to previous address
-	
+
+#modulo function description:
+#		takes two integers placed in $a0 and $a1 and returns $a0 % $a1 in the register $v0
+#		$t1 is used as a temporary to do the division, and $t3 is used for comparisons. $t2 is used for comparisons as well.
+			
 mod: 	
 	#setup for modulo
 	add $t1, $zero, $a0			#sets $t1 to the value of the first argument
@@ -110,7 +122,11 @@ mod:
 	#end of modulo with remainder
 	endRemainMod: 	add $v0, $t1, $a1	#puts the value into $v0 to be returned
 			jr $ra			#returns to previous address
-			
+
+#getpos function description:
+#		getpos takes user input until it receives two integers larger than 0. $a0 is the prompt and the value is returned in $v0
+#		all $t3 is used for comparison to check the condition			
+									
 getpos:
 	addi $sp, $sp, -12			#pushes the stack pointer back 12
 	sw $ra, 0($sp)				#saves the return address in the location of the stack pointer
@@ -124,7 +140,8 @@ getpos:
 		jal print			#jumps to the print function
 		addi $v0, $zero, 5		#puts the command to take integer input into $v0
 		syscall				#takes integer input
-		bne $v0, $zero, endPos		#checks to see if input was 0, if it was, repeat loop
+		slti $t3, $v0, 0		#checks to see if input is less than 0
+		beq $t3, $zero, endPos		#checks to see if input was less than 0, if it was, repeat loop
 		j loopPos			#jumps to top of loop
 	endPos:
 	#restore registers and deallocate stack
@@ -133,7 +150,10 @@ getpos:
 	lw $a1, 8($sp)				#restores $a1
 	addi $sp, $sp, 12			#restores stack pointer
 	jr $ra					#returns to return address
-	
+
+#getinput function description:	
+#		getinput stores the user input from getpos into memory adresses specified by $a0 and $a1
+				
 getinput:
 	addi $sp, $sp, -4			#moves the stack pointer back 4
 	sw $ra, 0($sp)				#stores the return address at 0 displacement from current stack pointer
